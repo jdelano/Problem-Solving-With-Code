@@ -1,5 +1,5 @@
 # Problem Solving with Code
-![Drjdelano ebook](https://github.com/user-attachments/assets/4d63fd10-24e0-4178-99f1-795efc0c5860)
+<img src=https://github.com/user-attachments/assets/4d63fd10-24e0-4178-99f1-795efc0c5860" alt="Book Cover" width="300" />
 
 Welcome to the official repository for *Problem Solving with Code*! This repository contains all the code examples and projects featured in the book, organized by chapter.
 
