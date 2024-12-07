@@ -36,7 +36,7 @@ To run the code in this repository, you will need:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/problem-solving-with-code.git
+   git clone https://github.com/jdelano/problem-solving-with-code.git
    ```
 2. Switch to the branch of the chapter you’re studying:
    ```bash
