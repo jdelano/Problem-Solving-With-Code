@@ -1,4 +1,6 @@
+#nullable disable
 using System;
+
 
 public class Resource
 {
