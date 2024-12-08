@@ -3,7 +3,7 @@ using System;
 
 public class Player
 {
-	private List<Item> inventory;
+	private Dictionary<ItemType, int> inventory;
 
 	#region Other Player Properties and Fields...
 	private int xp;
@@ -90,16 +90,15 @@ public class Player
 			return false;
 		}
 
-		var existingItem = inventory.FirstOrDefault(i => i.Type == item.Type);
-		if (existingItem != null)
+		if (inventory.ContainsKey(item.Type))
 		{
-			existingItem.Amount += item.Amount;
+			inventory[item.Type] += item.Amount;
 			Console.WriteLine($"{item.Amount} {item.Type} added to inventory.");
-			Console.WriteLine($"Total: {existingItem.Amount}");
+			Console.WriteLine($"Total: {item.Amount}");
 		}
 		else
 		{
-			inventory.Add(item);
+			inventory.Add(item.Type, item.Amount);
 			Console.WriteLine($"{item.Type} has been added to your inventory.");
 		}
 		return true;
@@ -108,54 +107,47 @@ public class Player
 
 	public bool HasInInventory(ItemType itemType)
 	{
-		return inventory.Any(item => item.Type == itemType);
+		return inventory.ContainsKey(itemType);
 	}
 
 	public void DisplayInventory()
 	{
 		Console.WriteLine("Inventory:");
-
+		int slot = 0;
 		// Loop through each item in the inventory array
-		for (int index = 0; index < inventory.Count; index++)
+		foreach (var kvp in inventory)
 		{
-			if (inventory[index] != null)
-			{
-				// Display details of the item if it’s not null
-				Console.WriteLine($"Slot {index + 1}:");
-				inventory[index].DisplayInfo();
-			}
+			slot += 1;
+			Console.WriteLine($"Slot {slot}: {kvp.Value} of {kvp.Key}");
 		}
 	}
 
-	public bool RemoveFromInventory(Resource resource)
+
+	public bool RemoveFromInventory(Item item)
 	{
-		for (int index = 0; index < inventory.Count; index++)
+		if (inventory.ContainsKey(item.Type))
 		{
-			if (inventory[index] != null && inventory[index].Type == resource.Type)
+			if (inventory[item.Type] >= item.Amount)
 			{
-				if (inventory[index].Amount >= resource.Amount)
+				inventory[item.Type] -= item.Amount;
+				if (inventory[item.Type] == 0)
 				{
-					inventory[index].Amount -= resource.Amount;
-
-					// If the amount goes to zero, remove the resource from the inventory
-					if (inventory[index].Amount == 0)
-					{
-						inventory[index] = null;
-					}
-
-					Console.WriteLine($"{resource.Amount} {resource.Type} removed from your inventory.");
-					return true;
+					inventory.Remove(item.Type);
 				}
-				else
-				{
-					Console.WriteLine($"Not enough {resource.Type} to remove.");
-					return false;
-				}
+				Console.WriteLine($"{item.Amount} {item.Type} removed from your	inventory.");
+				return true;
+			}
+			else
+			{
+				Console.WriteLine($"Not enough { item.Type} to remove.");
+				return false;
 			}
 		}
-
-		Console.WriteLine($"{resource.Type} not found in inventory.");
-		return false;
+		else
+		{
+			Console.WriteLine($"{item.Type} not found in inventory.");
+			return false;
+		}
 	}
 
 	public void CollectResource(Resource resource, Func<int> bonus)
