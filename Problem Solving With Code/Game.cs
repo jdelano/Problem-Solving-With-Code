@@ -3,62 +3,41 @@ using System;
 
 public class Game
 {
-    // Properties and Fields
-
-    // Relationship property that stores the player
+    private static Random random = new();
+    private bool shouldContinue;
+    private int maxAttempts;
     public Player Player { get; set; }
 
-    // Flag to determine if the game should continue
-    private bool shouldContinue;
-
-    // Number of resource collection attempts per turn
-    private int maxAttempts;
-
-    // Constructor
     public Game(int maxAttempts, string playerName)
     {
         this.maxAttempts = maxAttempts;
         shouldContinue = true;
-
-        // Instantiate the Player object
         Player = new(playerName);
     }
 
-    // Method to handle resource collection for a single turn
-    /// <summary>
-    /// Code Block 4.9: Refined PlayTurn Method
-    /// </summary>
     public void PlayTurn()
     {
         int turnTotal = 0;
         for (int i = 0; i < maxAttempts; i++)
         {
-            int attemptTotal = 0;
-            bool isValidInput = false;
-
-            while (!isValidInput)
-            {
-                Console.Write($"Attempt {i + 1}/{maxAttempts}: ");
-                Console.Write("Enter number of resources collected: ");
-                string input = Console.ReadLine();
-
-                // Try to parse the input
-                isValidInput = int.TryParse(input, out attemptTotal);
-                if (!isValidInput)
-                {
-                    Console.WriteLine("Invalid input. Please try again.");
-                }
-            }
+            int attemptTotal = random.Next(20, 51);
             turnTotal += attemptTotal;
+            Console.Write($"Attempt {i + 1}/{maxAttempts}: ");
+            Console.WriteLine($"{attemptTotal} resources.");
         }
-        // Collect resources and add to the player's total
-        Resource resource = new("Wood", turnTotal);
+        // Randomly select a resource type
+        int maxIndex = Enum.GetValues(typeof(ResourceType)).Length;
+        int resourceIndex = random.Next(maxIndex);
+        ResourceType selectedResource = (ResourceType)resourceIndex;
+
+        // Collect resources of the randomly selected type
+        Resource resource = new(selectedResource, turnTotal);
         Player.CollectResource(resource);
         Console.WriteLine($"Collected this turn: {turnTotal}");
         Console.WriteLine($"Your score: {Player.Score}");
+        Console.WriteLine($"You collected: {resource.Type}");
     }
 
-    // Main game loop method
     public void Run()
     {
         do

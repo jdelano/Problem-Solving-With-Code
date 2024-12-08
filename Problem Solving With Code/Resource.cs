@@ -1,13 +1,11 @@
 #nullable disable
 using System;
 
-
 public class Resource
 {
-    public string Type { get; set; }
+    public ResourceType Type { get; set; }
 
-    private int amount; // Backing field for the Amount property
-
+    private int amount;
     public int Amount
     {
         get { return amount; }
@@ -25,9 +23,9 @@ public class Resource
         }
     }
 
-    public Resource(string type, int initialAmount)
+    public Resource(ResourceType type, int initialAmount)
     {
         Type = type;
-        Amount = initialAmount; // Uses the property, not the field
+        Amount = initialAmount;
     }
 }
