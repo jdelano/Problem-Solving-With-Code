@@ -2,7 +2,7 @@
 
 ![Drjdelano ebook github](https://github.com/user-attachments/assets/a6f0c52d-2281-4cbd-ace6-08ef9d36108c)
 
-Welcome to the official repository for *Problem Solving with Code*! This repository contains all the code examples and projects featured in the book, organized by chapter.
+Welcome to the official repository for *Problem Solving with Code*! This repository contains all the code featured in the book, organized by chapter.
 
 ## About the Book
 
