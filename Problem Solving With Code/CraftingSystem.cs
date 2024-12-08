@@ -4,26 +4,26 @@ using System;
 public class CraftingSystem
 {
     private Recipe[] recipes = new Recipe[5]; // Array to store available recipes
-    private ItemType[,] craftingGrid = new ItemType[3, 3]; // 3x3 crafting grid
+    private ItemType?[,] craftingGrid = new ItemType?[3, 3]; // 3x3 crafting grid
 
     public CraftingSystem()
     {
         ClearGrid();  // Initialize the crafting grid to be empty (None)
 
         // Example recipe for a steel sword
-        recipes[0] = new Recipe("Steel Sword", new ItemType[,]
+        recipes[0] = new Recipe("Steel Sword", new ItemType?[,]
         {
-            { ItemType.None, ItemType.Steel, ItemType.None },
-            { ItemType.None, ItemType.Steel, ItemType.None },
-            { ItemType.None, ItemType.Wood, ItemType.None }
+            { null, ItemType.Steel, null },
+            { null, ItemType.Steel, null },
+            { null, ItemType.Wood, null }
         }, new Resource(ItemType.Sword, 1));
 
         #region Add more recipes here...
-        recipes[1] = new Recipe("Bucket", new ItemType[,]
+        recipes[1] = new Recipe("Bucket", new ItemType?[,]
         {
-            { ItemType.None, ItemType.None, ItemType.None },
-            { ItemType.Steel, ItemType.None, ItemType.Steel },
-            { ItemType.None, ItemType.Steel, ItemType.None }
+            { null, null, null },
+            { ItemType.Steel, null, ItemType.Steel },
+            { null, ItemType.Steel, null }
         }, new Resource(ItemType.Bucket, 1));
         #endregion
     }
@@ -36,7 +36,7 @@ public class CraftingSystem
         {
             for (int j = 0; j < 3; j++)
             {
-                craftingGrid[i, j] = ItemType.None;
+                craftingGrid[i, j] = null;
             }
         }
     }
@@ -50,7 +50,7 @@ public class CraftingSystem
 
     public void RemoveResource(int row, int column)
     {
-        craftingGrid[row, column] = ItemType.None;
+        craftingGrid[row, column] = null;
     }
 
     // Method to attempt crafting

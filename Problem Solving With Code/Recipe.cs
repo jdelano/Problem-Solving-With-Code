@@ -4,10 +4,10 @@ using System;
 public class Recipe
 {
     public string Name { get; set; }
-    private ItemType[,] pattern;
+    private ItemType?[,] pattern;
     public Item Result { get; private set; }
 
-    public Recipe(string name, ItemType[,] pattern, Item result)
+    public Recipe(string name, ItemType?[,] pattern, Item result)
     {
         Name = name;
         this.pattern = pattern;
@@ -15,7 +15,7 @@ public class Recipe
     }
 
     // Method to check if the current grid matches the recipe pattern
-    public bool Matches(ItemType[,] grid)
+    public bool Matches(ItemType?[,] grid)
     {
         for (int row = 0; row < 3; row++)
         {

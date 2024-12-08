@@ -78,12 +78,6 @@ public class Player
 
 	public bool AddToInventory(Item item)
 	{
-		if (item.Type == ItemType.None)
-		{
-			Console.WriteLine("Invalid item: None cannot be added to inventory.");
-			return false;
-		}
-
 		if (IsInventoryFull)
 		{
 			Console.WriteLine("Your inventory is full! You cannot add more items.");

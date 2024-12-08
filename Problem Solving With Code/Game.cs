@@ -125,17 +125,17 @@ public void PlayTurn()
         int column = DisplayMenu(columns) - 1;
 
         string[] resources = Enum.GetNames(typeof(ItemType));
-        int resourceIndex = DisplayMenu(resources) - 1;
-        ItemType ItemType = (ItemType)resourceIndex;
-        if (Player.HasInInventory(ItemType))
+        int resourceIndex = DisplayMenu(resources);
+        ItemType itemType = (ItemType)resourceIndex;
+        if (Player.HasInInventory(itemType))
         {
-            craftingSystem.PlaceResource(row, column, ItemType);
-            Console.WriteLine($"{ItemType} placed at ({row}, {column}).");
-            Player.RemoveFromInventory(new Resource(ItemType, 1)); // Remove one unit of the resource from inventory
+            craftingSystem.PlaceResource(row, column, itemType);
+            Console.WriteLine($"{itemType} placed at ({row}, {column}).");
+            Player.RemoveFromInventory(new Resource(itemType, 1)); // Remove one unit of the resource from inventory
         }
         else
         {
-            Console.WriteLine($"There is no {ItemType} in your inventory.");
+            Console.WriteLine($"There is no {itemType} in your inventory.");
         }
     }
 
