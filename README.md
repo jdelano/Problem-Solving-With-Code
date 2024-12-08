@@ -2,7 +2,7 @@
 
 ![Drjdelano ebook github](https://github.com/user-attachments/assets/a6f0c52d-2281-4cbd-ace6-08ef9d36108c)
 
-Welcome to the official repository for *Problem Solving with Code*! This repository contains all the code examples and projects featured in the book, organized by chapter.
+Welcome to the official repository for *Problem Solving with Code*! This repository contains all the code featured in the book, organized by chapter.
 
 ## About the Book
 
@@ -57,3 +57,22 @@ This project is licensed under the [MIT License](LICENSE). Feel free to use, mod
 If you have questions about the code or suggestions for improvement, feel free to open an issue or contact the author through the book’s official website.
 
 Happy coding!
+
+## Known Errors
+
+The following errors were discovered in the book after it went to press:
+
+- Chapter 8
+   - Code Block 8.6: 
+      - On line 15, the type of the grid parameter for the Matches method should be `ItemType` instead of `ResourceType`.
+      - On line 21, the pattern array name should be lower case `pattern` instead of upper case `Pattern`.
+   - Code Block 8.9: The parameters passed into the Equipment constructor were in the wrong order. The correct code should be as follows:
+      ```csharp
+      Equipment sword = new Equipment(ItemType.Sword, 1, 50, 25);
+      ```
+- Appendix A
+   - Code Block A.5:
+      - On line 7, the type of the result parameter should be `Item` instead of `Resource`.
+- Appendix B
+   - On page 226, coalescing was spelled incorrectly.
+   
