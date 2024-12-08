@@ -3,7 +3,7 @@ using System;
 
 public class Player
 {
-	private List<Item> inventory;
+	private List<IInventoryItem> inventory;
 
 	#region Other Player Properties and Fields...
 	private int xp;
@@ -76,127 +76,30 @@ public class Player
 		}
 	}
 
-	public bool AddToInventory(Item item)
+	public bool AddToInventory(IInventoryItem item)
 	{
-		if (item.Type == ItemType.None)
+		if (inventory.Count >= maxInventorySize)
 		{
-			Console.WriteLine("Invalid item: None cannot be added to inventory.");
+			Console.WriteLine("Your inventory is full! Cannot add more items.");
 			return false;
 		}
-
-		if (IsInventoryFull)
-		{
-			Console.WriteLine("Your inventory is full! You cannot add more items.");
-			return false;
-		}
-
-		var existingItem = inventory.FirstOrDefault(i => i.Type == item.Type);
-		if (existingItem != null)
-		{
-			existingItem.Amount += item.Amount;
-			Console.WriteLine($"{item.Amount} {item.Type} added to inventory.");
-			Console.WriteLine($"Total: {existingItem.Amount}");
-		}
-		else
-		{
-			inventory.Add(item);
-			Console.WriteLine($"{item.Type} has been added to your inventory.");
-		}
+		inventory.Add(item);
+		Console.WriteLine($"{item.Name} has been added to your inventory.");
 		return true;
 	}
 
 
-	public bool HasInInventory(ItemType itemType)
-	{
-		return inventory.Any(item => item.Type == itemType);
-	}
 
+	// Displaying the inventory
 	public void DisplayInventory()
 	{
 		Console.WriteLine("Inventory:");
-
-		// Loop through each item in the inventory array
-		for (int index = 0; index < inventory.Count; index++)
+		foreach (var item in inventory)
 		{
-			if (inventory[index] != null)
-			{
-				// Display details of the item if it’s not null
-				Console.WriteLine($"Slot {index + 1}:");
-				inventory[index].DisplayInfo();
-			}
+			Console.WriteLine($"- {item.Name}: {item.GetDescription()} (Weight: {item.Weight})");
 		}
 	}
 
-	public bool RemoveFromInventory(Resource resource)
-	{
-		for (int index = 0; index < inventory.Count; index++)
-		{
-			if (inventory[index] != null && inventory[index].Type == resource.Type)
-			{
-				if (inventory[index].Amount >= resource.Amount)
-				{
-					inventory[index].Amount -= resource.Amount;
-
-					// If the amount goes to zero, remove the resource from the inventory
-					if (inventory[index].Amount == 0)
-					{
-						inventory[index] = null;
-					}
-
-					Console.WriteLine($"{resource.Amount} {resource.Type} removed from your inventory.");
-					return true;
-				}
-				else
-				{
-					Console.WriteLine($"Not enough {resource.Type} to remove.");
-					return false;
-				}
-			}
-		}
-
-		Console.WriteLine($"{resource.Type} not found in inventory.");
-		return false;
-	}
-
-	public void CollectResource(Resource resource, Func<int> bonus)
-	{
-		if (CanCollectResources)
-		{
-			if (AddToInventory(resource))
-			{
-				switch (resource.Amount)
-				{
-					#region Bonus calculation case statements here...
-
-					case >= 100:
-						int bonusPoints = resource.Amount * bonus();
-						Score += bonusPoints;
-						XP += bonusPoints / 5;
-						Console.WriteLine("You earned a score bonus!");
-						break;
-					case >= 50:
-						Console.WriteLine("Good job! You're halfway there.");
-						break;
-					case 0:
-						Console.WriteLine("No resources collected.");
-						break;
-					default:
-						Console.WriteLine("Keep going to reach your goal.");
-						break;
-						#endregion
-				}
-				Stamina -= staminaNeededToCollect;
-			}
-			else
-			{
-				Console.WriteLine($"Inventory is full!");
-			}
-		}
-		else
-		{
-			Console.WriteLine("Not enough stamina to collect resources!");
-		}
-	}
 
 	#region Other Player Methods...
 	public void LevelUp()

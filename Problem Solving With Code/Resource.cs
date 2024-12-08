@@ -1,9 +1,13 @@
 #nullable disable
 using System;
 
-public class Resource : Item
+public class Resource : Item, IInventoryItem
 {
     public string HarvestLocation { get; set; }
+
+    public string Name { get; set; }
+
+    public double Weight { get; set; }
 
     // Constructor for Resource, which calls the base constructor
     public Resource(ItemType type, int amount) : base(type, amount)
@@ -33,5 +37,10 @@ public class Resource : Item
     {
         base.DisplayInfo();
         Console.WriteLine($"Harvest Location: { HarvestLocation}");
+    }
+
+    public string GetDescription()
+    {
+        return $"{Name} weighing {Weight} with harvest location {HarvestLocation}";
     }
 }

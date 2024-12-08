@@ -97,7 +97,7 @@ public void PlayTurn()
                     var craftedItem = craftingSystem.Craft();
                     if (craftedItem != null)
                     {
-                        Player.AddToInventory(craftedItem);
+                        // TODO: Player.AddToInventory(craftedItem);
                         Console.WriteLine($"Successfully crafted: {craftedItem.Type}");
                         crafting = false; // Exit crafting loop after successful crafting
                     }
@@ -127,16 +127,16 @@ public void PlayTurn()
         string[] resources = Enum.GetNames(typeof(ItemType));
         int resourceIndex = DisplayMenu(resources) - 1;
         ItemType ItemType = (ItemType)resourceIndex;
-        if (Player.HasInInventory(ItemType))
-        {
-            craftingSystem.PlaceResource(row, column, ItemType);
-            Console.WriteLine($"{ItemType} placed at ({row}, {column}).");
-            Player.RemoveFromInventory(new Resource(ItemType, 1)); // Remove one unit of the resource from inventory
-        }
-        else
-        {
-            Console.WriteLine($"There is no {ItemType} in your inventory.");
-        }
+        // if (Player.HasInInventory(ItemType))
+        // {
+        //     craftingSystem.PlaceResource(row, column, ItemType);
+        //     Console.WriteLine($"{ItemType} placed at ({row}, {column}).");
+        //     Player.RemoveFromInventory(new Resource(ItemType, 1)); // Remove one unit of the resource from inventory
+        // }
+        // else
+        // {
+        //     Console.WriteLine($"There is no {ItemType} in your inventory.");
+        // }
     }
 
     // Helper method to remove a resource from the crafting grid
@@ -174,18 +174,18 @@ public void PlayTurn()
 
             // Collect resources of the randomly selected type
             Resource resource = new(selectedResource, turnTotal);
-            Player.CollectResource(resource, () =>
-            {
-                switch (selectedResource)
-                {
-                    case ItemType.Gold:
-                        return 2;
-                    case ItemType.Gemstone:
-                        return 3;
-                    default:
-                        return 1;
-                }
-            });
+            // Player.CollectResource(resource, () =>
+            // {
+            //     switch (selectedResource)
+            //     {
+            //         case ItemType.Gold:
+            //             return 2;
+            //         case ItemType.Gemstone:
+            //             return 3;
+            //         default:
+            //             return 1;
+            //     }
+            // });
             Console.WriteLine($"Collected this turn: {turnTotal}");
             Console.WriteLine($"Your score: {Player.Score}");
             Console.WriteLine($"You collected: {resource.Type}");
