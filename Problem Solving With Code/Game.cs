@@ -1,67 +1,159 @@
 #nullable disable
-using System;
+#pragma warning disable IDE0066
 
 
 public class Game
 {
+    public Player Player { get; set; }
+    private CraftingSystem craftingSystem;
+
+    #region Other Game fields here...
     private static Random random = new();
     private bool shouldContinue;
     private int maxAttempts;
-    public Player Player { get; set; }
-
+    #endregion
     public Game(int maxAttempts, string playerName)
     {
         this.maxAttempts = maxAttempts;
         shouldContinue = true;
         Player = new(playerName);
+        craftingSystem = new CraftingSystem();
     }
 
-    // Method to display the menu and get player's choice
-    public int DisplayMenu()
+
+    private int DisplayMenu(string[] options)
     {
         int choice;
         do
         {
-            Console.WriteLine("Choose an option:");
-            Console.WriteLine("1. Collect Resources");
-            Console.WriteLine("2. Restore Stamina");
-            Console.WriteLine("3. Level Up");
-            Console.WriteLine("4. Quit");
+            Console.WriteLine("Choose an action: ");
+            for (int index = 0; index < options.Length; index++)
+            {
+                Console.WriteLine($"{index + 1}. {options[index]}");
+            }
             string input = Console.ReadLine();
             bool isValid = int.TryParse(input, out choice);
-
-            if (!isValid || choice < 1 || choice > 4)
+            if (!isValid || choice < 1 || choice > options.Length)
             {
-                Console.WriteLine("Please enter a number between 1 and 4.");
+                Console.WriteLine($"Please enter a number between 1 and {options.Length}.");
             }
-        } while (choice < 1 || choice > 4);
+        } while (choice < 1 || choice > options.Length);
         return choice;
     }
 
 
-    public void PlayTurn()
+public void PlayTurn()
+{
+    // Show player's status before each action
+    Player.DisplayStatus();
+
+    string[] options = { "Collect Resources", "Restore Stamina", "Level Up", "Show Inventory", "Craft", "Quit" };
+    int choice = DisplayMenu(options);
+    switch (choice)
     {
-        // Show player's status before each action
-        Player.DisplayStatus();
-        // Display the menu and get the player's choice
-        int choice = DisplayMenu();
-        switch (choice)
+        case 1:
+            CollectResources();
+            break;
+        case 2:
+            Player.RestoreStamina();
+            break;
+        case 3:
+            Player.LevelUp();
+            break;
+        case 4:
+            Player.DisplayInventory();
+            break;
+        case 5:
+            Craft();
+            break;
+        case 6:
+            Console.WriteLine("Thanks for playing!");
+            shouldContinue = false;
+            break;
+    }
+}
+
+    public void Craft()
+    {
+        Console.WriteLine("Entering crafting mode...");
+        bool crafting = true;
+
+        while (crafting)
         {
-            case 1:
-                CollectResources();
-                break;
-            case 2:
-                Player.RestoreStamina();
-                break;
-            case 3:
-                Player.LevelUp();
-                break;
-            case 4:
-                Console.WriteLine("Thanks for playing!");
-                shouldContinue = false;
-                break;
+            Player.DisplayInventory();
+            Console.WriteLine("Crafting Grid:");
+            craftingSystem.DisplayGrid();
+            string[] options = { "Place a resource on the grid", "Remove a resource from the grid", "Attempt to craft", "Cancel crafting" };
+            int choice = DisplayMenu(options);
+            switch (choice)
+            {
+                case 1:
+                    PlaceResourceOnGrid();
+                    break;
+                case 2:
+                    RemoveResourceFromGrid();
+                    break;
+                case 3:
+                    var craftedItem = craftingSystem.Craft();
+                    if (craftedItem != null)
+                    {
+                        Player.AddToInventory(craftedItem);
+                        Console.WriteLine($"Successfully crafted: {craftedItem.Type}");
+                        crafting = false; // Exit crafting loop after successful crafting
+                    }
+                    else
+                    {
+                        Console.WriteLine("No matching recipe found. Try again.");
+                    }
+                    break;
+                case 4:
+                    Console.WriteLine("Exiting crafting mode.");
+                    crafting = false;
+                    break;
+            }
         }
     }
+
+
+    // Helper method to place a resource on the crafting grid
+    private void PlaceResourceOnGrid()
+    {
+        string[] rows = { "Top Row", "Middle Row", "Bottom Row" };
+        int row = DisplayMenu(rows) - 1;
+
+        string[] columns = { "Left Column", "Middle Column", "Right Column" };
+        int column = DisplayMenu(columns) - 1;
+
+        string[] resources = Enum.GetNames(typeof(ResourceType));
+        int resourceIndex = DisplayMenu(resources) - 1;
+        ResourceType resourceType = (ResourceType)resourceIndex;
+        if (Player.HasInInventory(resourceType))
+        {
+            craftingSystem.PlaceResource(row, column, resourceType);
+            Console.WriteLine($"{resourceType} placed at ({row}, {column}).");
+            Player.RemoveFromInventory(new Resource(resourceType, 1)); // Remove one unit of the resource from inventory
+        }
+        else
+        {
+            Console.WriteLine($"There is no {resourceType} in your inventory.");
+        }
+    }
+
+    // Helper method to remove a resource from the crafting grid
+    private void RemoveResourceFromGrid()
+    {
+        string[] rows = { "Top Row", "Middle Row", "Bottom Row" };
+        int row = DisplayMenu(rows) - 1;
+
+        string[] columns = { "Left Column", "Middle Column", "Right Column" };
+        int column = DisplayMenu(columns) - 1;
+
+        craftingSystem.RemoveResource(row, column);
+    }
+
+    #region Other Game methods here...
+
+
 
     public void CollectResources()
     {
@@ -76,8 +168,8 @@ public class Game
                 Console.WriteLine($"{attemptTotal} resources.");
             }
             // Randomly select a resource type
-            int maxIndex = Enum.GetValues(typeof(ResourceType)).Length;
-            int resourceIndex = random.Next(maxIndex);
+            // int maxIndex = Enum.GetValues(typeof(ResourceType)).Length;
+            int resourceIndex = random.Next(1, 7);
             ResourceType selectedResource = (ResourceType)resourceIndex;
 
             // Collect resources of the randomly selected type
@@ -102,7 +194,6 @@ public class Game
         {
             Console.WriteLine("Insufficient Stamina to Collect Resources!");
         }
-
     }
 
     public void Run()
@@ -114,5 +205,9 @@ public class Game
             PlayTurn();
         } while (shouldContinue);
     }
+
+    #endregion
+
 }
+
 
