@@ -1,15 +1,11 @@
 ﻿#nullable disable
 using System;
 
-// Create a variable totalResources and set it to 0.
-int totalResources = 0;
+// Create a player object using the constructor
+Player player1 = new("Alex");
 
-// Prompt user for the number of resources collected.
-Console.Write("Enter number of resources collected: ");
-int collected = int.Parse(Console.ReadLine());
+// Creating a resource object using the constructor
+Resource wood = new("Wood", 5);
 
-// Add the collected resources to totalResources.
-totalResources += collected;
-
-// Print out the totalResources.
-Console.WriteLine($"Total Resources: {totalResources}");
+// Player collects the resource
+player1.CollectResource(wood);
