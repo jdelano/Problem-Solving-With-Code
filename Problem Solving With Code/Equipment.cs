@@ -7,7 +7,8 @@ public class Equipment : Item
 	public int AttackPower { get; set; }
 
 	// Constructor for Equipment, which calls the base constructor
-	public Equipment(ItemType type, int amount, int durability, int attackPower) : base(type, amount)
+	public Equipment(ItemType type, int amount, int durability, int attackPower) 
+        : base(type, amount)
 	{
 		Durability = durability;
 		AttackPower = attackPower;

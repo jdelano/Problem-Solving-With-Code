@@ -1,6 +1,6 @@
 #nullable disable
+using System;
 #pragma warning disable IDE0066
-
 
 public class Game
 {
@@ -42,36 +42,36 @@ public class Game
     }
 
 
-public void PlayTurn()
-{
-    // Show player's status before each action
-    Player.DisplayStatus();
-
-    string[] options = { "Collect Resources", "Restore Stamina", "Level Up", "Show Inventory", "Craft", "Quit" };
-    int choice = DisplayMenu(options);
-    switch (choice)
+    public void PlayTurn()
     {
-        case 1:
-            CollectResources();
-            break;
-        case 2:
-            Player.RestoreStamina();
-            break;
-        case 3:
-            Player.LevelUp();
-            break;
-        case 4:
-            Player.DisplayInventory();
-            break;
-        case 5:
-            Craft();
-            break;
-        case 6:
-            Console.WriteLine("Thanks for playing!");
-            shouldContinue = false;
-            break;
+        // Show player's status before each action
+        Player.DisplayStatus();
+
+        string[] options = { "Collect Resources", "Restore Stamina", "Level Up", "Show Inventory", "Craft", "Quit" };
+        int choice = DisplayMenu(options);
+        switch (choice)
+        {
+            case 1:
+                CollectResources();
+                break;
+            case 2:
+                Player.RestoreStamina();
+                break;
+            case 3:
+                Player.LevelUp();
+                break;
+            case 4:
+                Player.DisplayInventory();
+                break;
+            case 5:
+                Craft();
+                break;
+            case 6:
+                Console.WriteLine("Thanks for playing!");
+                shouldContinue = false;
+                break;
+        }
     }
-}
 
     public void Craft()
     {
@@ -126,16 +126,16 @@ public void PlayTurn()
 
         string[] resources = Enum.GetNames(typeof(ItemType));
         int resourceIndex = DisplayMenu(resources) - 1;
-        ItemType ItemType = (ItemType)resourceIndex;
-        if (Player.HasInInventory(ItemType))
+        ItemType resourceType = (ItemType)resourceIndex;
+        if (Player.HasInInventory(new Item(resourceType, 1)))
         {
-            craftingSystem.PlaceResource(row, column, ItemType);
-            Console.WriteLine($"{ItemType} placed at ({row}, {column}).");
-            Player.RemoveFromInventory(new Resource(ItemType, 1)); // Remove one unit of the resource from inventory
+            craftingSystem.PlaceResource(row, column, resourceType);
+            Console.WriteLine($"{resourceType} placed at ({row}, {column}).");
+            Player.RemoveFromInventory(new Resource(resourceType, 1)); // Remove one unit of the resource from inventory
         }
         else
         {
-            Console.WriteLine($"There is no {ItemType} in your inventory.");
+            Console.WriteLine($"There is no {resourceType} in your inventory.");
         }
     }
 
@@ -168,7 +168,7 @@ public void PlayTurn()
                 Console.WriteLine($"{attemptTotal} resources.");
             }
             // Randomly select a resource type
-            // int maxIndex = Enum.GetValues(typeof(ItemType)).Length;
+            // int maxIndex = Enum.GetValues(typeof(ResourceType)).Length;
             int resourceIndex = random.Next(1, 7);
             ItemType selectedResource = (ItemType)resourceIndex;
 
@@ -209,5 +209,6 @@ public void PlayTurn()
     #endregion
 
 }
+
 
 

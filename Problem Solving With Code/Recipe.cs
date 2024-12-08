@@ -1,4 +1,3 @@
-#nullable disable
 using System;
 
 public class Recipe
@@ -23,11 +22,40 @@ public class Recipe
             {
                 if (grid[row, column] != pattern[row, column])
                 {
-                    return false;       // If any cell doesn’t match, the recipe fails
+                    return false;  // If any cell doesn't match, the recipe fails
                 }
             }
         }
-        return true;     // If all cells match, the recipe is valid
+        return true;  // If all cells match, the recipe is valid
     }
+
+
+	public List<Item> GetRequiredItems()
+	{
+		List<Item> requiredItems = new();
+		for (int row = 0; row < 3; row++)
+		{
+			for (int column = 0; column < 3; column++)
+			{
+				ItemType currentType = pattern[row, column];
+				if (currentType != ItemType.None)
+				{
+					var existingItem = requiredItems
+						.FirstOrDefault(item => item.Type == currentType);
+					if (existingItem != null)
+					{
+						existingItem.Amount++;
+					}
+					else
+					{
+						requiredItems.Add(new Item(currentType, 1));
+					}
+				}
+			}
+		}
+		return requiredItems;
+	}
 }
+
+
 

@@ -1,5 +1,4 @@
 using System;
-
 public class Item
 {
 	// Common properties for all items
