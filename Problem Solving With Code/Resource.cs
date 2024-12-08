@@ -1,31 +1,37 @@
 #nullable disable
 using System;
 
-public class Resource
+public class Resource : Item
 {
-    public ResourceType Type { get; set; }
+    public string HarvestLocation { get; set; }
 
-    private int amount;
-    public int Amount
+    // Constructor for Resource, which calls the base constructor
+    public Resource(ItemType type, int amount) : base(type, amount)
     {
-        get { return amount; }
-        set
+        switch (type)
         {
-            if (value < 0)
-            {
-                Console.WriteLine("Error: Setting amount to 0.");
-                amount = 0;
-            }
-            else
-            {
-                amount = value;
-            }
+            case ItemType.Wood:
+                HarvestLocation = "Forest";
+                break;
+            case ItemType.Stone:
+                HarvestLocation = "Ground";
+                break;
+            case ItemType.Steel:
+            case ItemType.Graphite:
+            case ItemType.Gold:
+            case ItemType.Gemstone:
+                HarvestLocation = "Mine";
+                break;
+            default:
+                HarvestLocation = "Unknown";
+                break;
         }
     }
 
-    public Resource(ResourceType type, int initialAmount)
+    // Method to display resource-specific information
+    public override void DisplayInfo()
     {
-        Type = type;
-        Amount = initialAmount;
+        base.DisplayInfo();
+        Console.WriteLine($"Harvest Location: { HarvestLocation}");
     }
 }

@@ -124,18 +124,18 @@ public void PlayTurn()
         string[] columns = { "Left Column", "Middle Column", "Right Column" };
         int column = DisplayMenu(columns) - 1;
 
-        string[] resources = Enum.GetNames(typeof(ResourceType));
+        string[] resources = Enum.GetNames(typeof(ItemType));
         int resourceIndex = DisplayMenu(resources) - 1;
-        ResourceType resourceType = (ResourceType)resourceIndex;
-        if (Player.HasInInventory(resourceType))
+        ItemType ItemType = (ItemType)resourceIndex;
+        if (Player.HasInInventory(ItemType))
         {
-            craftingSystem.PlaceResource(row, column, resourceType);
-            Console.WriteLine($"{resourceType} placed at ({row}, {column}).");
-            Player.RemoveFromInventory(new Resource(resourceType, 1)); // Remove one unit of the resource from inventory
+            craftingSystem.PlaceResource(row, column, ItemType);
+            Console.WriteLine($"{ItemType} placed at ({row}, {column}).");
+            Player.RemoveFromInventory(new Resource(ItemType, 1)); // Remove one unit of the resource from inventory
         }
         else
         {
-            Console.WriteLine($"There is no {resourceType} in your inventory.");
+            Console.WriteLine($"There is no {ItemType} in your inventory.");
         }
     }
 
@@ -168,9 +168,9 @@ public void PlayTurn()
                 Console.WriteLine($"{attemptTotal} resources.");
             }
             // Randomly select a resource type
-            // int maxIndex = Enum.GetValues(typeof(ResourceType)).Length;
+            // int maxIndex = Enum.GetValues(typeof(ItemType)).Length;
             int resourceIndex = random.Next(1, 7);
-            ResourceType selectedResource = (ResourceType)resourceIndex;
+            ItemType selectedResource = (ItemType)resourceIndex;
 
             // Collect resources of the randomly selected type
             Resource resource = new(selectedResource, turnTotal);
@@ -178,9 +178,9 @@ public void PlayTurn()
             {
                 switch (selectedResource)
                 {
-                    case ResourceType.Gold:
+                    case ItemType.Gold:
                         return 2;
-                    case ResourceType.Gemstone:
+                    case ItemType.Gemstone:
                         return 3;
                     default:
                         return 1;

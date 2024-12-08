@@ -4,27 +4,27 @@ using System;
 public class CraftingSystem
 {
     private Recipe[] recipes = new Recipe[5]; // Array to store available recipes
-    private ResourceType[,] craftingGrid = new ResourceType[3, 3]; // 3x3 crafting grid
+    private ItemType[,] craftingGrid = new ItemType[3, 3]; // 3x3 crafting grid
 
     public CraftingSystem()
     {
         ClearGrid();  // Initialize the crafting grid to be empty (None)
 
         // Example recipe for a steel sword
-        recipes[0] = new Recipe("Steel Sword", new ResourceType[,]
+        recipes[0] = new Recipe("Steel Sword", new ItemType[,]
         {
-            { ResourceType.None, ResourceType.Steel, ResourceType.None },
-            { ResourceType.None, ResourceType.Steel, ResourceType.None },
-            { ResourceType.None, ResourceType.Wood, ResourceType.None }
-        }, new Resource(ResourceType.Sword, 1));
+            { ItemType.None, ItemType.Steel, ItemType.None },
+            { ItemType.None, ItemType.Steel, ItemType.None },
+            { ItemType.None, ItemType.Wood, ItemType.None }
+        }, new Resource(ItemType.Sword, 1));
 
         #region Add more recipes here...
-        recipes[1] = new Recipe("Bucket", new ResourceType[,]
+        recipes[1] = new Recipe("Bucket", new ItemType[,]
         {
-            { ResourceType.None, ResourceType.None, ResourceType.None },
-            { ResourceType.Steel, ResourceType.None, ResourceType.Steel },
-            { ResourceType.None, ResourceType.Steel, ResourceType.None }
-        }, new Resource(ResourceType.Bucket, 1));
+            { ItemType.None, ItemType.None, ItemType.None },
+            { ItemType.Steel, ItemType.None, ItemType.Steel },
+            { ItemType.None, ItemType.Steel, ItemType.None }
+        }, new Resource(ItemType.Bucket, 1));
         #endregion
     }
 
@@ -36,13 +36,13 @@ public class CraftingSystem
         {
             for (int j = 0; j < 3; j++)
             {
-                craftingGrid[i, j] = ResourceType.None;
+                craftingGrid[i, j] = ItemType.None;
             }
         }
     }
 
     // Method to place a resource on the grid
-    public void PlaceResource(int row, int col, ResourceType type)
+    public void PlaceResource(int row, int col, ItemType type)
     {
         craftingGrid[row, col] = type;
         Console.WriteLine($"Placed {type} at position ({row}, {col})");
@@ -50,17 +50,18 @@ public class CraftingSystem
 
     public void RemoveResource(int row, int column)
     {
-        craftingGrid[row, column] = ResourceType.None;
+        craftingGrid[row, column] = ItemType.None;
     }
 
     // Method to attempt crafting
-    public Resource Craft()
+    // Method to attempt crafting
+    public Item Craft()
     {
         foreach (var recipe in recipes)
         {
             if (recipe != null && recipe.Matches(craftingGrid))
             {
-                Console.WriteLine($"Crafted {recipe.Name}!");
+                Console.WriteLine($"Crafted { recipe.Name}!");
                 return recipe.Result;
             }
         }
